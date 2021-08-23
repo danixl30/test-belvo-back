@@ -7,7 +7,7 @@ export const bankListRequest = async () => {
 }
 
 export const registerUser = async (bankName, username, password) => {
-    const res = await axios.post('http://localhost:4000/register', {
+    const res = await axios.post('https://test-belvo-back.herokuapp.com/register', {
         Headers:{
             'Content-Type': 'application/json'
         },
