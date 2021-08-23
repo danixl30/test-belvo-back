@@ -103,7 +103,7 @@ export default function HomeComponent() {
                     </table>
                 </>
             }
-            {balances && 
+            {balances && balances.length > 0 &&
                 <>
                     <table className="table">
                         <thead>
@@ -116,9 +116,9 @@ export default function HomeComponent() {
                         <tbody>
                             {balances.map((balance, index) => 
                                 <tr key = {index}>
-                                    <td>{balance.value_date}</td>
-                                    <td>{balance.current_balance}</td>
-                                    <td>{balance.balance}</td>
+                                    <td>{balance.value_date || ''}</td>
+                                    <td>{balance.current_balance || ''}</td>
+                                    <td>{balance.balance || ''}</td>
                                 </tr>
                             )}
                         </tbody>
