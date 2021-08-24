@@ -4,7 +4,7 @@ const route = express.Router();
 
 route.post('/register', root);
 
-route.get('/alldetails', getAllDetails);
+route.post('/alldetails', getAllDetails);
 
 route.post('/alltrasacctions', getAllTrasacctions);
 

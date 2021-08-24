@@ -40,20 +40,20 @@ exports.getIntitutions = (req, response) => {
     });
 }
 
-exports.getAllDetails = (req, res) => {
-    let resJ;
+exports.getAllDetails = (req, response) => {
+    const {linkId} = req.body || ''
     client.connect()
     .then(function () {
-        client.accounts.retrieve('37733e57-5ed2-4c85-877e-f8727a9995d7')
+        client.accounts.retrieve(linkId)
         .then(function (res) {
             console.log(res);
-            resJ = res
+            response.json(res);
         })
         .catch(function (error) {
             console.log(error);
+            response.json(error);
         });
     });
-    res.json(resJ);
 }
 
 exports.getAllTrasacctions = (req, response) => {
@@ -77,10 +77,11 @@ exports.getAllTrasacctions = (req, response) => {
 
 exports.getBalance = (req, response) => {
     const {linkId, initialDate, endDate} = req.body || '';
+    console.log(linkId);
     client.connect()
     .then(function () {
         client.balances.retrieve(linkId, initialDate, { 'dateTo': endDate})
-        client.balances.retrieve('37733e57-5ed2-4c85-877e-f8727a9995d7', '2020-01-01', { 'dateTo': '2020-12-31' })
+        //client.balances.retrieve('37733e57-5ed2-4c85-877e-f8727a9995d7', '2020-01-01', { 'dateTo': '2020-12-31' })
         .then(function (res) {
             console.log(res);
             response.json(res);
