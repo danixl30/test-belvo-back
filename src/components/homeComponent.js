@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { deleteAccount, getBalances, getTransacctions } from '../api/requestApi';
+import { deleteAccount, getBalances, getTransacctions, listAcounts } from '../api/requestApi';
 
 export default function HomeComponent() {
 
@@ -8,6 +8,8 @@ export default function HomeComponent() {
     const [endDate, setEndDate] = useState('');
     const [transacctions, setTransacctions] = useState(null);
     const [balances, setBalances] = useState(null);
+    const [account, setAccount] = useState('');
+    const [accounts, setAccounts] = useState();
 
     const {link_id} = useParams();
     const history = useHistory()
@@ -27,8 +29,18 @@ export default function HomeComponent() {
     const onClickTransacctions = async () => {
         if (initialDate !== '' && endDate !== ''){
             setBalances(null);
-            const data = await getTransacctions(link_id, initialDate, endDate);
-            setTransacctions(data);
+            let data = await getTransacctions(link_id, initialDate, endDate);
+            console.log(data);
+            if (data.statusCode){
+                alert('Error');
+                setAccount('');
+                data = [];
+            }
+            if(account !== ''){
+                let accountFiltered = data.filter(acco => acco.account.public_identification_value === account.public_identification_value)
+                setTransacctions(accountFiltered);
+            }else
+                setTransacctions(data);
         }else{
             alert('The dates are empty');
         }
@@ -37,8 +49,18 @@ export default function HomeComponent() {
     const onClickBalances = async () => {
         if (initialDate !== '' && endDate !== ''){
             setTransacctions(null);
-            const data = await getBalances(link_id, initialDate, endDate);
-            setBalances(data);
+            let data = await getBalances(link_id, initialDate, endDate);
+            console.log(data);
+            if (data.statusCode){
+                alert('Error');
+                setAccount('');
+                data = [];
+            }
+            if(account !== ''){
+                let balanceFiltered = data.filter(balance => balance.account.public_identification_value === account.public_identification_value)
+                setBalances(balanceFiltered);
+            }else
+                setBalances(data);
         }else{
             alert('The dates are empty');
         }
@@ -48,6 +70,21 @@ export default function HomeComponent() {
         const data = await deleteAccount(link_id);
         history.replace('/');
     }
+
+    const getAccounts = async () => {
+        let  data = await listAcounts(link_id);
+        //console.log(data);
+        if (data.statusCode){
+            alert('Error');
+            setAccount('');
+            data = [];
+        }
+        setAccounts(data);
+    }
+
+    useEffect(() => {
+        getAccounts()
+    }, [])
 
     return (
         <>
@@ -73,6 +110,18 @@ export default function HomeComponent() {
                             <button onClick={onClickLogOut} type="button" class="btn btn-danger">Log out</button>
                         </div>
                     </div>
+                </div>
+                <div className="dropdown">
+                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Accounts
+                    </button>
+       
+                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a className="dropdown-item" onClick = {(e) => setAccount('')}>All</a></li>
+                        {accounts && accounts.length > 0 && accounts.map((accountItem, index) => 
+                            <li key={index}><a className="dropdown-item" onClick = {(e) => setAccount(accountItem)}>{accountItem.public_identification_name}</a></li>
+                        )}
+                    </ul>
                 </div>
             </div>
             {transacctions && 

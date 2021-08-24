@@ -7,6 +7,7 @@ export const bankListRequest = async () => {
 }
 
 export const registerUser = async (bankName, username, password) => {
+    //const res = await axios.post('http://localhost:4000/register', {
     const res = await axios.post('https://test-belvo-back.herokuapp.com/register', {
         Headers:{
             'Content-Type': 'application/json'
@@ -19,6 +20,7 @@ export const registerUser = async (bankName, username, password) => {
 }
 
 export const getTransacctions = async (linkId, initialDate, endDate) => {
+    //const res = await axios.post('http://localhost:4000/alltrasacctions', {
     const res = await axios.post('https://test-belvo-back.herokuapp.com/alltrasacctions', {
         Headers:{
             'Content-Type': 'application/json'
@@ -32,6 +34,7 @@ export const getTransacctions = async (linkId, initialDate, endDate) => {
 }
 
 export const getBalances = async (linkId, initialDate, endDate) => {
+    //const res = await axios.post('http://localhost:4000/getbalance', {
     const res = await axios.post('https://test-belvo-back.herokuapp.com/getbalance', {
         Headers:{
             'Content-Type': 'application/json'
@@ -45,9 +48,18 @@ export const getBalances = async (linkId, initialDate, endDate) => {
 }
 
 export const deleteAccount = async (linkId) => {
+    //const res = await axios.post('http://localhost:4000/deleteaccount', {
     const res = await axios.post('https://test-belvo-back.herokuapp.com/deleteaccount', {
         linkId
     })
 
+    return res.data;
+}
+
+export const listAcounts = async (linkId) => {
+    //const res = await axios.post('http://localhost:4000/alldetails', {
+    const res = await axios.post('https://test-belvo-back.herokuapp.com/alldetails', {
+        linkId
+    });
     return res.data;
 }
